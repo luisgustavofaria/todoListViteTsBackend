@@ -1,22 +1,27 @@
 import express from 'express';
 import { PrismaClient } from '@prisma/client';
 
+const cors = require('cors');
+
 const app = express();
-const prisma = new PrismaClient();
+const prisma = new PrismaClient({ log: ['query'] });
+const PORT = process.env.PORT || 3333;
 
 app.use(express.json());
+app.use(cors());
 
-app.get('/tasks', async (req, res) => {
-  const tasks = await prisma.task.findMany();
-  res.json(tasks);
+app.get('/tasks/list-many', async (req, res) => {
+  const task = await prisma.task.findMany();
+  return res.status(200).json(task);
 });
 
-app.post('/tasks', async (req, res) => {
+app.post('/tasks/create', async (req, res) => {
   const { title, description, isFavorited, color } = req.body;
+
   const task = await prisma.task.create({
     data: { title, description, isFavorited, color },
   });
-  res.json(task);
+  return res.status(201).json(task);
 });
 
 // app.put('/tasks/:id', async (req, res) => {
@@ -26,7 +31,7 @@ app.post('/tasks', async (req, res) => {
 //     where: { id },
 //     data: { title, description, isFavorited, color },
 //   });
-//   res.json(task);
+//   return res.status(201).json(task);
 // });
 
 // app.delete('/tasks/:id', async (req, res) => {
@@ -35,7 +40,6 @@ app.post('/tasks', async (req, res) => {
 //   res.status(204).send();
 // });
 
-const PORT = process.env.PORT || 3333;
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });

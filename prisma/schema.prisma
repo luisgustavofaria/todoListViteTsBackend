@@ -14,9 +14,11 @@ datasource db {
 }
 
 model Task {
-  id          String   @id @unique
+  id          String     @id @default(uuid())
   title       String
   description String
   isFavorited Boolean
   color       String
+
+  @@map("tasks")
 }
