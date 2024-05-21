@@ -24,21 +24,21 @@ app.post('/tasks/create', async (req, res) => {
   return res.status(201).json(task);
 });
 
-// app.put('/tasks/:id', async (req, res) => {
-//   const { id } = req.params;
-//   const { title, description, isFavorited, color } = req.body;
-//   const task = await prisma.task.update({
-//     where: { id },
-//     data: { title, description, isFavorited, color },
-//   });
-//   return res.status(201).json(task);
-// });
+app.put('/tasks/:id', async (req, res) => {
+  const { id } = req.params;
+  const { title, description, isFavorited, color } = req.body;
+  const task = await prisma.task.update({
+    where: { id },
+    data: { title, description, isFavorited, color },
+  });
+  return res.status(201).json(task);
+});
 
-// app.delete('/tasks/:id', async (req, res) => {
-//   const { id } = req.params;
-//   await prisma.task.delete({ where: { id } });
-//   res.status(204).send();
-// });
+app.delete('/tasks/:id', async (req, res) => {
+  const { id } = req.params;
+  await prisma.task.delete({ where: { id } });
+  res.status(204).send();
+});
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
